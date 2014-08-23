@@ -5,7 +5,7 @@
 		
 		user_id: null,
 		user_data: {
-			tasks: {}
+			tasks: []
 		},
 		
 		initialize: function() {
@@ -33,7 +33,7 @@
 				task.name = $(this).find('input').val();
 				task.order = 0;
 				task.created = new Date();
-				nt.user_data.tasks[task.id] = task;
+				nt.user_data.tasks.push(task);
 				nt.renderTask(task.id, task.name, task.order);
 				nt.saveData();
 				$(this).find('input').val('');
@@ -41,9 +41,14 @@
 			
 			// Delete task
 			$('.deleteTask').click( function() {
-				var task_id = $(this).parent().data('task_id');
-				$('#task_'+task_id).slideUp('fast', function() { $(this).remove(); });
-				delete nt.user_data.tasks[task_id];
+				var id = $(this).parent().data('id');
+				$('#task_'+id).slideUp('fast', function() { $(this).remove(); });
+				for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) {
+					if (nt.user_data.tasks[i].id == id) {
+						nt.user_data.tasks.splice(i, 1);
+						break;
+					}
+				}
 				nt.saveData();
 			});
 		
@@ -103,6 +108,17 @@
 			$('#tab-'+page).addClass('active');
 		},
 		
+		// Update a task
+		updateTask: function(id, field, value)
+		{
+			for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) {
+				if (nt.user_data.tasks[i].id == id) {
+					nt.user_data.tasks[i][field] = value;
+					break;
+				}
+			}
+		},
+		
 		// Render a task
 		renderTask: function(id, name, order) {
 			html = '<li id="task_'+id+'" data-id="'+id+'" class="list-group-item task" data-order='+order+'>' +
@@ -125,13 +141,41 @@
 				var i = 1;
 				$('.task').each( function() {
 					var id = $(this).attr('data-id');
-					nt.user_data.tasks[id].order = i;
+					nt.updateTask(id, 'order', i);
 					$(this).attr('data-order', i);
 					i++;
-				})
+				});
+				nt.user_data.tasks.sort(function(x, y) {
+					if (x.order < y.order) return -1;
+					if (x.order > y.order) return 1;
+					return 0;
+				});
 				nt.saveData();
 			}
 		});
 		
 		
 	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
