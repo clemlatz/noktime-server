@@ -1,11 +1,13 @@
 
 	var nt = {
 		
-		appVersion: '0.2',
+		appVersion: '0.1',
 		
 		user_id: null,
 		user_data: {
-			tasks: []
+			tasks: [],
+			projects: [],
+			clients: []
 		},
 		
 		initialize: function() {
@@ -23,34 +25,17 @@
 				nt.saveData();
 			}
 			
-			/* LOAD EVENTS */
+			// Load events
+			nt.loadEvents();
 			
-			// Create new task
-			$('#createTask').submit( function(event) {
-				event.preventDefault();
-				var task = {};
-				task.id = nt.makeUid(),
-				task.name = $(this).find('input').val();
-				task.order = 0;
-				task.created = new Date();
-				nt.user_data.tasks.push(task);
-				nt.renderTask(task.id, task.name, task.order);
-				nt.saveData();
-				$(this).find('input').val('');
-			});
+			// Load default page at startup
+			nt.loadPage('tasks');
 			
-			// Delete task
-			$('.deleteTask').click( function() {
-				var id = $(this).parent().data('id');
-				$('#task_'+id).slideUp('fast', function() { $(this).remove(); });
-				for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) {
-					if (nt.user_data.tasks[i].id == id) {
-						nt.user_data.tasks.splice(i, 1);
-						break;
-					}
-				}
-				nt.saveData();
-			});
+		},
+		
+		loadEvents: function() {
+			
+			/* NAVIGATION */
 		
 			// Change page
 			$('a').click( function(event) {
@@ -66,8 +51,34 @@
 				}
 			});
 			
-			// Load default page at startup
-			nt.loadPage('tasks');
+			/* TASKS */
+			
+			// Create new task
+			$('#createTask.event').submit( function(event) {
+				event.preventDefault();
+				var task = {};
+				task.id = nt.makeUid(),
+				task.name = $(this).find('input').val();
+				task.order = 0;
+				task.created = new Date();
+				nt.user_data.tasks.push(task);
+				nt.renderTask(task.id, task.name, task.order);
+				nt.saveData();
+				$(this).find('input').val('');
+			}).removeClass('event');
+			
+			// Delete task
+			$('.deleteTask.event').click( function() {
+				var id = $(this).parent().data('id');
+				$('#task_'+id).slideUp('fast', function() { $(this).remove(); });
+				for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) {
+					if (nt.user_data.tasks[i].id == id) {
+						nt.user_data.tasks.splice(i, 1);
+						break;
+					}
+				}
+				nt.saveData();
+			}).removeClass('event');
 			
 		},
 		
@@ -124,9 +135,10 @@
 			html = '<li id="task_'+id+'" data-id="'+id+'" class="list-group-item task" data-order='+order+'>' +
 					'<input  id="task_'+id+'_input" type="checkbox"> ' +
 					'<label for="task_'+id+'_input">'+ name + '</label>' +
-					'<span class="pull-right deleteTask pointer"><i class="fa fa-trash-o"></i></span>' +
+					'<span class="pull-right deleteTask pointer event"><i class="fa fa-trash-o"></i></span>' +
 				'</li>';
 			$("#task-list").append(html);
+			nt.loadEvents();
 		}
 	}
 

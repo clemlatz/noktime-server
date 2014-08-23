@@ -26,28 +26,23 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<!--<li id="tab-activity"><a href="#activity"><i class="fa fa-clock-o"></i> Activité</a></li>-->
-						<li id="tab-tasks"><a href="#/tasks"><i class="fa fa-list"></i> Tâches</a></li>
-						<li id="tab-projects"><a href="#/projects" class="loadPage"><i class="fa fa-folder"></i> Projets</a></li>
-						<li id="tab-clients"><a href="#/clients" class="loadPage"><i class="fa fa-user"></i> Clients</a></li>
+						<li id="tab-tasks"><a href="#/tasks"><i class="fa fa-list"></i> Tasks</a></li>
+<!-- 						<li id="tab-projects"><a href="#/projects" class="loadPage"><i class="fa fa-folder"></i> Projects</a></li> -->
+<!-- 						<li id="tab-clients"><a href="#/clients" class="loadPage"><i class="fa fa-user"></i> Clients</a></li> -->
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="http://axys.me/login/"><i class="fa fa-refresh"></i> Sync</a></li>
+<!-- 						<li><a href="http://axys.me/login/"><i class="fa fa-refresh"></i> Sync</a></li> -->
 					</ul>
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
 		</nav>
 		
-		<div id="activity" class="page container">
-			<h1>Activité</h1>
-		</div>
-		
 		<div id="tasks" class="page container">
-			<h1>Tâches</h1>
 			<ul class="list-group sortable" id="task-list">
 				<li class="list-group-item">
-					<form id="createTask">
-						<input type="text" placeholder="Nouvelle tâche..." required>
+					<form id="createTask" class="event">
+						<input type="text" placeholder="New task..." required>
 						<button type="submit">OK</button>
 					</form>
 				</li>
@@ -55,11 +50,10 @@
 		</div>
 		
 		<div id="projects" class="page container">
-			<h1>Projets</h1>
 			<ul class="list-group sortable" id="task-list">
 				<li class="list-group-item">
-					<form id="createTask">
-						<input type="text" placeholder="Nouvelle tâche..." required>
+					<form id="createTask" class="event">
+						<input type="text" placeholder="New project..." required>
 						<button type="submit">OK</button>
 					</form>
 				</li>
@@ -67,11 +61,10 @@
 		</div>
 		
 		<div id="clients" class="page container">
-			<h1>Clients</h1>
 			<ul class="list-group sortable" id="task-list">
 				<li class="list-group-item">
-					<form id="createTask">
-						<input type="text" placeholder="Nouvelle tâche..." required>
+					<form id="createTask" class="event">
+						<input type="text" placeholder="New client..." required>
 						<button type="submit">OK</button>
 					</form>
 				</li>
