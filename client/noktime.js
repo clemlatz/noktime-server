@@ -31,10 +31,12 @@
 				var task = {};
 				task.id = nt.makeUid(),
 				task.name = $(this).find('input').val();
+				task.order = 0;
 				task.created = new Date();
 				nt.user_data.tasks[task.id] = task;
-				nt.renderTask(task.id, task.name);
+				nt.renderTask(task.id, task.name, task.order);
 				nt.saveData();
+				$(this).find('input').val('');
 			});
 			
 			// Delete task
@@ -85,7 +87,7 @@
 				for (task in nt.user_data.tasks)
 				{
 					task = nt.user_data.tasks[task];
-					nt.renderTask(task.id, task.name);
+					nt.renderTask(task.id, task.name, task.order);
 				}
 			}
 		},
@@ -102,10 +104,10 @@
 		},
 		
 		// Render a task
-		renderTask: function(task_id, task_name) {
-			html = '<li id="task_'+task_id+'" data-task_id="'+task_id+'" class="list-group-item">' +
-					'<input  id="task_'+task_id+'_input" type="checkbox"> ' +
-					'<label for="task_'+task_id+'_input">'+ task_name + '</label>' +
+		renderTask: function(id, name, order) {
+			html = '<li id="task_'+id+'" data-id="'+id+'" class="list-group-item task" data-order='+order+'>' +
+					'<input  id="task_'+id+'_input" type="checkbox"> ' +
+					'<label for="task_'+id+'_input">'+ name + '</label>' +
 					'<span class="pull-right deleteTask pointer"><i class="fa fa-trash-o"></i></span>' +
 				'</li>';
 			$("#task-list").append(html);
@@ -113,13 +115,23 @@
 	}
 
 	$(function() {
-		
-		
 
 		nt.initialize();
 		
-		$(".sortable").sortable();
-		
+		$(".sortable").sortable({
+			update: function(event, ui) {
+			
+				// Update order
+				var i = 1;
+				$('.task').each( function() {
+					var id = $(this).attr('data-id');
+					nt.user_data.tasks[id].order = i;
+					$(this).attr('data-order', i);
+					i++;
+				})
+				nt.saveData();
+			}
+		});
 		
 		
 	});
