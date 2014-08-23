@@ -23,13 +23,12 @@
 					<span class="navbar-brand" href="#">noktime <span class="app-version"></span></span>
 				</div>
 				
-				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<!--<li id="tab-activity"><a href="#activity"><i class="fa fa-clock-o"></i> Activité</a></li>-->
-						<li id="tab-tasks"><a href="#tasks"><i class="fa fa-list"></i> Tâches</a></li>
-						<!--<li id="tab-projects"><a href="#projects" class="loadPage"><i class="fa fa-folder"></i> Projets</a></li>-->
-						<!--<li id="tab-clients"><a href="#clients" class="loadPage"><i class="fa fa-user"></i> Clients</a></li>-->
+						<li id="tab-tasks"><a href="#/tasks"><i class="fa fa-list"></i> Tâches</a></li>
+						<li id="tab-projects"><a href="#/projects" class="loadPage"><i class="fa fa-folder"></i> Projets</a></li>
+						<li id="tab-clients"><a href="#/clients" class="loadPage"><i class="fa fa-user"></i> Clients</a></li>
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
@@ -47,8 +46,8 @@
 			<h1>Tâches</h1>
 			<ul class="list-group sortable" id="task-list">
 				<li class="list-group-item">
-					<form id="create-task">
-						<input type="text" placeholder="Nouvelle tâche...">
+					<form id="createTask">
+						<input type="text" placeholder="Nouvelle tâche..." required>
 						<button type="submit">OK</button>
 					</form>
 				</li>
@@ -81,6 +80,6 @@
 		<script src="//cdn.biblys.fr/boostrap/3.0.0/js/bootstrap.min.js"></script>
 		<script src="//cdn.biblys.fr/html5sql/1.0.0/html5sql.min.js"></script>
 		<script src="//cdn.biblys.fr/jquery-ui/1.10.4/jquery-ui.min.js"></script>
-		<script src="noktime.js"></script>
+		<script src="/noktime.js"></script>
     </body>
 </html>
