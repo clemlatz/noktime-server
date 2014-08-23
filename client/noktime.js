@@ -5,7 +5,7 @@
 		
 		user_id: null,
 		user_data: {
-			tasks: []
+			tasks: {}
 		},
 		
 		initialize: function() {
@@ -32,14 +32,17 @@
 				task.id = nt.makeUid(),
 				task.name = $(this).find('input').val();
 				task.created = new Date();
-				nt.user_data.tasks.push(task);
+				nt.user_data.tasks[task.id] = task;
 				nt.renderTask(task.id, task.name);
 				nt.saveData();
 			});
 			
 			// Delete task
 			$('.deleteTask').click( function() {
-				var delete_id = $(this).parent().data('task_id');
+				var task_id = $(this).parent().data('task_id');
+				$('#task_'+task_id).slideUp('fast', function() { $(this).remove(); });
+				delete nt.user_data.tasks[task_id];
+				nt.saveData();
 			});
 		
 			// Change page
@@ -79,10 +82,10 @@
 		loadData: function() {
 			if (localStorage.user_data) {
 				nt.user_data = JSON.parse(localStorage.user_data);
-				for (var i = 0, c = nt.user_data.tasks.length; i < c; i++)
+				for (task in nt.user_data.tasks)
 				{
-					var t = nt.user_data.tasks[i];
-					nt.renderTask(t.id, t.name);
+					task = nt.user_data.tasks[task];
+					nt.renderTask(task.id, task.name);
 				}
 			}
 		},
@@ -101,9 +104,9 @@
 		// Render a task
 		renderTask: function(task_id, task_name) {
 			html = '<li id="task_'+task_id+'" data-task_id="'+task_id+'" class="list-group-item">' +
-					'<input  id="'+task_id+'_input" type="checkbox"> ' +
-					'<label for="'+task_id+'_input">'+ task_name + '</label>' +
-					'<span class="pull-right deleteTask"><i class="fa fa-trash-o"></i></span>' +
+					'<input  id="task_'+task_id+'_input" type="checkbox"> ' +
+					'<label for="task_'+task_id+'_input">'+ task_name + '</label>' +
+					'<span class="pull-right deleteTask pointer"><i class="fa fa-trash-o"></i></span>' +
 				'</li>';
 			$("#task-list").append(html);
 		}

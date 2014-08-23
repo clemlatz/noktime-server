@@ -6,6 +6,6 @@
 		display: none;
 	}
 	
-	label {
+	label, .pointer {
 		cursor: pointer;
 	}
