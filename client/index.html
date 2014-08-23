@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="utf-8">
+        <title>noktime</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link href="//cdn.biblys.fr/boostrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="//cdn.biblys.fr/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+        <link href="//cdn.biblys.fr/jquery-ui/1.10.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
+        <link href="noktime.css" rel="stylesheet" media="screen">
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<span class="navbar-brand" href="#">noktime <span class="app-version"></span></span>
+				</div>
+				
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<!--<li id="tab-activity"><a href="#activity"><i class="fa fa-clock-o"></i> Activité</a></li>-->
+						<li id="tab-tasks"><a href="#tasks"><i class="fa fa-list"></i> Tâches</a></li>
+						<!--<li id="tab-projects"><a href="#projects" class="loadPage"><i class="fa fa-folder"></i> Projets</a></li>-->
+						<!--<li id="tab-clients"><a href="#clients" class="loadPage"><i class="fa fa-user"></i> Clients</a></li>-->
+					</ul>
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="http://axys.me/login/"><i class="fa fa-refresh"></i> Sync</a></li>
+					</ul>
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+		
+		<div id="activity" class="page container">
+			<h1>Activité</h1>
+		</div>
+		
+		<div id="tasks" class="page container">
+			<h1>Tâches</h1>
+			<ul class="list-group sortable" id="task-list">
+				<li class="list-group-item">
+					<form id="create-task">
+						<input type="text" placeholder="Nouvelle tâche...">
+						<button type="submit">OK</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+		
+		<div id="projects" class="page container">
+			<h1>Projets</h1>
+			<ul class="list-group">
+				<li class="list-group-item">Cras justo odio</li>
+				<li class="list-group-item">Dapibus ac facilisis in</li>
+				<li class="list-group-item">Morbi leo risus</li>
+				<li class="list-group-item">Porta ac consectetur ac</li>
+				<li class="list-group-item">Vestibulum at eros</li>
+			</ul>
+		</div>
+		
+		<div id="clients" class="page container">
+			<h1>Clients</h1>
+			<ul class="list-group">
+				<li class="list-group-item">Le Bélial'</li>
+				<li class="list-group-item">Scylla</li>
+				<li class="list-group-item">Dystopia</li>
+				<li class="list-group-item">DraftQuest</li>
+				<li class="list-group-item"><input type="text" placeholder="Nouveau client..."></li>
+			</ul>
+		</div>
+		
+		<script src="//cdn.biblys.fr/jquery/1.11.0/jquery.min.js"></script>
+		<script src="//cdn.biblys.fr/boostrap/3.0.0/js/bootstrap.min.js"></script>
+		<script src="//cdn.biblys.fr/html5sql/1.0.0/html5sql.min.js"></script>
+		<script src="//cdn.biblys.fr/jquery-ui/1.10.4/jquery-ui.min.js"></script>
+		<script src="noktime.js"></script>
+    </body>
+</html>
