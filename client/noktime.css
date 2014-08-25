@@ -9,3 +9,8 @@
 	label, .pointer {
 		cursor: pointer;
 	}
+	
+	.completed label {
+		text-decoration: line-through;
+		color: gray;
+	}

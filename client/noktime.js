@@ -61,8 +61,9 @@
 				task.name = $(this).find('input').val();
 				task.order = 0;
 				task.created = new Date();
+				task.completed = 'false';
 				nt.user_data.tasks.push(task);
-				nt.renderTask(task.id, task.name, task.order);
+				nt.renderTask(task);
 				nt.saveData();
 				$(this).find('input').val('');
 			}).removeClass('event');
@@ -79,6 +80,28 @@
 				}
 				nt.saveData();
 			}).removeClass('event');
+			
+			// Check task as completed
+			$('.task input[type=checkbox].event').click( function() {
+				var id = $(this).parent().attr('data-id'),
+					completed = $(this).parent().attr('data-completed');
+				console.log('completed');
+				if (completed == "false")
+				{
+					console.log('plop1');
+					$(this).parent().addClass('completed').attr('data-completed', new Date());
+					nt.updateTask(id, 'completed', new Date());
+				}
+				else
+				{
+					console.log('plop2');
+					$(this).parent().removeClass('completed').attr('data-completed', 'false');
+					nt.updateTask(id, 'completed', 'false');
+				}
+				nt.saveData();
+			}).removeClass('event');
+			
+			console.log('Events loaded');
 			
 		},
 		
@@ -103,7 +126,7 @@
 				for (task in nt.user_data.tasks)
 				{
 					task = nt.user_data.tasks[task];
-					nt.renderTask(task.id, task.name, task.order);
+					nt.renderTask(task);
 				}
 			}
 		},
@@ -131,10 +154,18 @@
 		},
 		
 		// Render a task
-		renderTask: function(id, name, order) {
-			html = '<li id="task_'+id+'" data-id="'+id+'" class="list-group-item task" data-order='+order+'>' +
-					'<input  id="task_'+id+'_input" type="checkbox"> ' +
-					'<label for="task_'+id+'_input">'+ name + '</label>' +
+		renderTask: function(task) {
+			if (task.completed != 'false') {
+				var completed = ' completed',
+					checked = ' checked';
+			}
+			else {
+				var completed = '',
+					checked = '';
+			}
+			html = '<li id="task_'+task.id+'" data-id="'+task.id+'" class="list-group-item task'+completed+'" data-order='+task.order+' data-completed='+task.completed+'>' +
+					'<input id="task_'+task.id+'_input" class="event" type="checkbox"'+checked+'> ' +
+					'<label for="task_'+task.id+'_input">'+ task.name + '</label>' +
 					'<span class="pull-right deleteTask pointer event"><i class="fa fa-trash-o"></i></span>' +
 				'</li>';
 			$("#task-list").append(html);

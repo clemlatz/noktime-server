@@ -19,3 +19,12 @@ TODO
  - Sync between devices
  - Backbone.js ?
  - Add notes to task
+
+CHANGELOG
+---------
+
+0.2 (2014-08-22)
+ - Completeable tasks
+
+0.1 (2014-08-21)
+ - Sortable task list

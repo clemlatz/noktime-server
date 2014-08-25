@@ -13,6 +13,10 @@ app.get('/noktime.js', function(req, res){
   	res.sendFile(__dirname+'/client/noktime.js');
 });
 
+app.get('/favicon.png', function(req, res){
+  	res.sendFile(__dirname+'/client/favicon.png');
+});
+
 
 var server = app.listen(3000, function() {
     console.log('Listening on port %d', server.address().port);
