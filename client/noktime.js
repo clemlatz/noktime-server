@@ -1,7 +1,7 @@
 
 	var nt = {
 		
-		appVersion: '0.1',
+		appVersion: '0.2',
 		
 		user_id: null,
 		user_data: {
