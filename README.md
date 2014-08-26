@@ -7,16 +7,19 @@ Installation
 ------------
 
 1. Install node http://nodejs.org/download/
-2. Clone osx-remote from github : `git clone https://github.com/iwazaru/noktime.git`
+2. Clone noktime from github : `git clone https://github.com/iwazaru/noktime.git`
 3. Change directory `cd noktime`
 4. Install dependencies `npm install`
-7. Start server `node server.js`
+5. Start server `node server.js`
+
+You can now simply manage your tasks & time @ http://localhost:3000/
 
 TODO
 ----
+ - Highlight #projects & @clients
+ - Sync between devices (dropbox ?)
  - Projects & clients management
  - Time managment
- - Sync between devices
  - Backbone.js ?
  - Add notes to task
 
