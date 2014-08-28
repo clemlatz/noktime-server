@@ -12,7 +12,7 @@ Installation
 4. Install dependencies `npm install`
 5. Start server `node server.js`
 
-You can now simply manage your tasks & time @ http://localhost:3000/
+You can now simply manage your tasks & time @ http://localhost:8080/
 
 TODO
 ----

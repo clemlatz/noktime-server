@@ -88,13 +88,11 @@
 				console.log('completed');
 				if (completed == "false")
 				{
-					console.log('plop1');
 					$(this).parent().addClass('completed').attr('data-completed', new Date());
 					nt.updateTask(id, 'completed', new Date());
 				}
 				else
 				{
-					console.log('plop2');
 					$(this).parent().removeClass('completed').attr('data-completed', 'false');
 					nt.updateTask(id, 'completed', 'false');
 				}
@@ -164,8 +162,9 @@
 					checked = '';
 			}
 			
-			task.name = task.name.replace(/#(\S*)/g, '<span class="project-tag">$1</span>');
-			task.name = task.name.replace(/@(\S*)/g, '<span class="client-tag">$1</span>');
+			// #project and @client highlighting
+			task.name = task.name.replace(/#(\S*)/g, '<span class="label label-success">$1</span>');
+			task.name = task.name.replace(/@(\S*)/g, '<span class="label label-info">$1</span>');
 			
 			html = '<li id="task_'+task.id+'" data-id="'+task.id+'" class="list-group-item task'+completed+'" data-order='+task.order+' data-completed='+task.completed+'>' +
 					'<input id="task_'+task.id+'_input" class="event" type="checkbox"'+checked+'> ' +
