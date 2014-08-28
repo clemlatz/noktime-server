@@ -1,7 +1,7 @@
 
 	var nt = {
 		
-		appVersion: '0.2',
+		appVersion: '0.3',
 		
 		user_id: null,
 		user_data: {
@@ -163,6 +163,10 @@
 				var completed = '',
 					checked = '';
 			}
+			
+			task.name = task.name.replace(/#(\S*)/g, '<span class="project-tag">$1</span>');
+			task.name = task.name.replace(/@(\S*)/g, '<span class="client-tag">$1</span>');
+			
 			html = '<li id="task_'+task.id+'" data-id="'+task.id+'" class="list-group-item task'+completed+'" data-order='+task.order+' data-completed='+task.completed+'>' +
 					'<input id="task_'+task.id+'_input" class="event" type="checkbox"'+checked+'> ' +
 					'<label for="task_'+task.id+'_input">'+ task.name + '</label>' +

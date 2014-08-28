@@ -13,4 +13,19 @@
 	.completed label {
 		text-decoration: line-through;
 		color: gray;
+		opacity: 0.5;
+	}
+	
+	.project-tag {
+		background-color: lightgreen;
+		padding: 3px;
+		opacity: 0.75;
+		font-size: 0.8em;
+	}
+	
+	.client-tag {
+		background-color: lightblue;
+		padding: 3px;
+		opacity: 0.75;
+		font-size: 0.8em;
 	}
