@@ -26,6 +26,9 @@ TODO
 CHANGELOG
 ---------
 
+0.3 (2014-08-28)
+ - Added @project and #client highlighting in task name
+
 0.2 (2014-08-22)
  - Completeable tasks
 
