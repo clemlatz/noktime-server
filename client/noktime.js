@@ -1,25 +1,39 @@
 
 	var nt = {
 		
-		appVersion: '0.3',
+		app_version: '0.4',
+		db_version: 1,
 		
 		user_id: null,
 		user_data: {
 			tasks: [],
-			projects: [],
-			clients: []
+			activities: []
 		},
 		
 		initialize: function() {
 			
 			// Show app version
-			$(".app-version").html(nt.appVersion);
+			$(".app-version").html(nt.app_version);
+			
+			// Updated database if necessary
+			if (nt.db_version != localStorage.db_version)
+			{
+				if (confirm('Database needs to be updated. You will loose all your data. Continue ?'))
+				{
+					localStorage.removeItem('user_data');
+					localStorage.db_version = nt.db_version;
+				}
+				else throw new Error('Database is outdated. Please reload the page.')
+			}
 			
 			// User UID
-			if (localStorage.user_id) {
+			if (localStorage.user_id) 
+			{
 				nt.user_id = localStorage.user_id;
 				nt.loadData();
-			} else {
+			} 
+			else 
+			{
 				nt.user_id = nt.makeUid();
 				localStorage.user_id = nt.user_id;
 				nt.saveData();
@@ -63,17 +77,20 @@
 				task.created = new Date();
 				task.completed = 'false';
 				nt.user_data.tasks.push(task);
-				nt.renderTask(task);
 				nt.saveData();
+				nt.renderTask(task);
 				$(this).find('input').val('');
+				nt.loadEvents();
 			}).removeClass('event');
 			
 			// Delete task
 			$('.deleteTask.event').click( function() {
-				var id = $(this).parent().data('id');
+				var id = $(this).parent().parent().data('id');
 				$('#task_'+id).slideUp('fast', function() { $(this).remove(); });
-				for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) {
-					if (nt.user_data.tasks[i].id == id) {
+				for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) 
+				{
+					if (nt.user_data.tasks[i].id == id) 
+					{
 						nt.user_data.tasks.splice(i, 1);
 						break;
 					}
@@ -95,6 +112,42 @@
 				{
 					$(this).parent().removeClass('completed').attr('data-completed', 'false');
 					nt.updateTask(id, 'completed', 'false');
+				}
+				nt.saveData();
+			}).removeClass('event');
+			
+			/* ACTIVITY */
+			
+			// Add activity
+			$('.addActivity.event').click( function() {
+				var duration = prompt('Hours spent ?', 1);
+				var id = $(this).parent().parent().data('id'),
+					name = $(this).parent().parent().find('label').text(),
+					activity = {
+						id: nt.makeUid(),
+						name: name,
+						duration: duration,
+						task_id: id,
+						date: new Date()
+					};
+				nt.renderActivity(activity);
+				nt.user_data.activities.push(activity);
+
+				nt.saveData();
+				
+			}).removeClass('event');
+			
+			// Delete activity
+			$('.deleteActivity.event').click( function() {
+				var id = $(this).parent().parent().data('id');
+				$('#activity_'+id).slideUp('fast', function() { $(this).remove(); });
+				for (var i = 0, c = nt.user_data.activities.length; i < c; i++) 
+				{
+					if (nt.user_data.activities[i].id == id) 
+					{
+						nt.user_data.activities.splice(i, 1);
+						break;
+					}
 				}
 				nt.saveData();
 			}).removeClass('event');
@@ -121,11 +174,18 @@
 		loadData: function() {
 			if (localStorage.user_data) {
 				nt.user_data = JSON.parse(localStorage.user_data);
+				if (typeof nt.user_data.activities === 'undefined') nt.user_data.activities = []; // Added in 0.4
 				for (task in nt.user_data.tasks)
 				{
 					task = nt.user_data.tasks[task];
 					nt.renderTask(task);
 				}
+				for (a in nt.user_data.activities)
+				{
+					activity = nt.user_data.activities[a];
+					nt.renderActivity(activity);
+				}
+				nt.loadEvents();
 			}
 		},
 		
@@ -143,8 +203,10 @@
 		// Update a task
 		updateTask: function(id, field, value)
 		{
-			for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) {
-				if (nt.user_data.tasks[i].id == id) {
+			for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) 
+			{
+				if (nt.user_data.tasks[i].id == id) 
+				{
 					nt.user_data.tasks[i][field] = value;
 					break;
 				}
@@ -163,16 +225,41 @@
 			}
 			
 			// #project and @client highlighting
-			task.name = task.name.replace(/#(\S*)/g, '<span class="label label-success">$1</span>');
-			task.name = task.name.replace(/@(\S*)/g, '<span class="label label-info">$1</span>');
+			var label = task.name;
+			label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
+			label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
 			
 			html = '<li id="task_'+task.id+'" data-id="'+task.id+'" class="list-group-item task'+completed+'" data-order='+task.order+' data-completed='+task.completed+'>' +
 					'<input id="task_'+task.id+'_input" class="event" type="checkbox"'+checked+'> ' +
-					'<label for="task_'+task.id+'_input">'+ task.name + '</label>' +
-					'<span class="pull-right deleteTask pointer event"><i class="fa fa-trash-o"></i></span>' +
+					'<label for="task_'+task.id+'_input">'+ label + '</label>' +
+					'<span class="pull-right btn-group pointer">' +
+						'<button type="button" class="btn btn-default btn-sm addActivity event"><i class="fa fa-clock-o"></i> time</button>' +
+						'<button type="button" class="btn btn-default btn-sm deleteTask event"><i class="fa fa-trash-o"></i> delete</button>' +
+					'</span>' +
 				'</li>';
 			$("#task-list").append(html);
-			nt.loadEvents();
+		},
+		
+		// Render an activity
+		renderActivity: function(activity) {
+			
+			// #project and @client highlighting
+			var label = activity.name;
+			label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
+			label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
+			
+			// Duration
+			var hours = parseInt(Number(activity.duration)),
+				minutes = Math.round((Number(activity.duration)-hours) * 60),
+				duration = (hours < 10 ? '0' : '')+hours+':'+(minutes < 10 ? '0' : '')+minutes;
+		
+			html = '<li id="activity_'+activity.id+'" data-id="'+activity.id+'" class="list-group-item activity">' +
+					duration + '&mdash;' + label +
+					'<span class="pull-right btn-group pointer">' +
+						'<button type="button" class="btn btn-default btn-xs deleteActivity event"><i class="fa fa-trash-o"></i> delete</button>' +
+					'</span>' +
+				'</li>';
+			$("#activity-list").append(html);
 		}
 	}
 

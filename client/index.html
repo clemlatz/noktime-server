@@ -13,7 +13,7 @@
     </head>
     <body>
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-			<div class="container-fluid">
+			<div class="container">
 				<!-- Brand and toggle get grouped for better mobile display -->
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -27,14 +27,12 @@
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<!--<li id="tab-activity"><a href="#activity"><i class="fa fa-clock-o"></i> Activité</a></li>-->
 						<li id="tab-tasks"><a href="#/tasks"><i class="fa fa-list"></i> Tasks</a></li>
-<!-- 						<li id="tab-projects"><a href="#/projects" class="loadPage"><i class="fa fa-folder"></i> Projects</a></li> -->
-<!-- 						<li id="tab-clients"><a href="#/clients" class="loadPage"><i class="fa fa-user"></i> Clients</a></li> -->
+						<li id="tab-activity"><a href="#/activity"><i class="fa fa-clock-o"></i> Activity</a></li>
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
-<!-- 						<li><a href="http://axys.me/login/"><i class="fa fa-refresh"></i> Sync</a></li> -->
+<!-- 						<li><i class="fa fa-dropbox"></i> Sync</li> -->
 					</ul>
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
@@ -50,25 +48,8 @@
 			</ul>
 		</div>
 		
-		<div id="projects" class="page container">
-			<ul class="list-group sortable" id="task-list">
-				<li class="list-group-item">
-					<form id="createTask" class="event">
-						<input type="text" placeholder="New project..." required>
-						<button type="submit">OK</button>
-					</form>
-				</li>
-			</ul>
-		</div>
-		
-		<div id="clients" class="page container">
-			<ul class="list-group sortable" id="task-list">
-				<li class="list-group-item">
-					<form id="createTask" class="event">
-						<input type="text" placeholder="New client..." required>
-						<button type="submit">OK</button>
-					</form>
-				</li>
+		<div id="activity" class="page container">
+			<ul class="list-group sortable" id="activity-list">
 			</ul>
 		</div>
 		

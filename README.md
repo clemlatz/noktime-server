@@ -16,15 +16,16 @@ You can now simply manage your tasks & time @ http://localhost:8080/
 
 TODO
 ----
- - Highlight #projects & @clients
  - Sync between devices (dropbox ?)
- - Projects & clients management
- - Time managment
  - Backbone.js ?
  - Add notes to task
 
 CHANGELOG
 ---------
+
+0.4 (2014-08-31)
+ - Time management
+ - Fixed a bug in projects and clients highlighting
 
 0.3 (2014-08-28)
  - Added @project and #client highlighting in task name
