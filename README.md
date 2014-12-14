@@ -12,7 +12,7 @@ Installation
 4. Install dependencies `npm install`
 5. Start server `node server.js`
 
-You can now simply manage your tasks & time @ http://localhost:8080/
+You can now simply manage your tasks & time @ http://localhost:5000/
 
 TODO
 ----
@@ -22,6 +22,10 @@ TODO
 
 CHANGELOG
 ---------
+
+0.5 (2014-12-14)
+ - Added a checkbox that toggle completed tasks
+ - Various code optimizations 
 
 0.4 (2014-08-31)
  - Time management
