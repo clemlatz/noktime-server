@@ -19,7 +19,7 @@
 			label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
 			label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
 			
-			html = '<li id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
+			var html = '<li id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
 				'<input id="task_'+this.id+'_input" class="event" type="checkbox"'+checked+'> ' +
 				'<label for="task_'+this.id+'_input">'+ label + '</label>' +
 				'<span class="pull-right btn-group pointer">' +
@@ -28,6 +28,39 @@
 				'</span>' +
 			'</li>';
 			$("#task-list").append(html);
+		}
+	}
+	
+	var Activity = function(id, name, duration, task_id) {
+		this.id = id || nt.makeUid();
+		this.name = name;
+		this.duration = duration;
+		this.task_id = task_id;
+		this.date = new Date();
+	}
+	
+	Activity.prototype = {
+		append: function() {
+			
+			// #project and @client highlighting
+			var label = this.name;
+			label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
+			label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
+			
+			// Duration
+			var hours = parseInt(Number(this.duration)),
+			minutes = Math.round((Number(this.duration)-hours) * 60),
+			duration = (hours < 10 ? '0' : '')+hours+':'+(minutes < 10 ? '0' : '')+minutes;
+			
+			var html = '<li id="activity_'+this.id+'" data-id="'+this.id+'" class="list-group-item activity">' +
+			duration + '&mdash;' + label +
+			'<span class="pull-right btn-group pointer">' +
+				'<button type="button" class="btn btn-default btn-xs deleteActivity event"><i class="fa fa-trash-o"></i> delete</button>' +
+			'</span>' +
+			'</li>';
+			
+			$("#activity-list").append(html);
+			
 		}
 	}
 
@@ -156,19 +189,18 @@
 			
 			// Add activity
 			$('.addActivity.event').click( function() {
+				
+				// Get duration
 				var duration = prompt('Hours spent ?', 1);
-				var id = $(this).parent().parent().data('id'),
-					name = $(this).parent().parent().find('label').text(),
-					activity = {
-						id: nt.makeUid(),
-						name: name,
-						duration: duration,
-						task_id: id,
-						date: new Date()
-					};
-				nt.renderActivity(activity);
-				nt.user_data.activities.push(activity);
+				
+				// Create duration task
+				var activity = new Activity(0, $(this).parent().parent().find('label').text(), duration, $(this).parent().parent().data('id'));
 
+				// Append to the DOM
+				activity.append();
+
+				// Save to local storage
+				nt.user_data.activities.push(activity);
 				nt.saveData();
 				
 			}).removeClass('event');
@@ -217,11 +249,11 @@
 					task.append();
 				});
 				
-				for (a in nt.user_data.activities)
-				{
-					activity = nt.user_data.activities[a];
-					nt.renderActivity(activity);
-				}
+				$.each(nt.user_data.activities, function(index, item) {
+					var activity = new Activity(item.id, item.name, item.duration, item.task_id);
+					activity.append();
+				});
+				
 				nt.loadEvents();
 			}
 		},
