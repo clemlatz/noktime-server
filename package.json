@@ -1,9 +1,13 @@
 {
   "name": "noktime",
   "description": "Simple time/task managment app",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "private": true,
   "dependencies": {
-    "express": "4.x"
+    "express": "4.x",
+    "bower": "1.3.x"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install"
   }
 }
