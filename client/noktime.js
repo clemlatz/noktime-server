@@ -20,11 +20,11 @@
 			label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
 			
 			var html = '<li id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
-				'<input id="task_'+this.id+'_input" class="event" type="checkbox"'+checked+'> ' +
+				'<input id="task_'+this.id+'_input" class="completeTask" type="checkbox"'+checked+'> ' +
 				'<label for="task_'+this.id+'_input">'+ label + '</label>' +
 				'<span class="pull-right btn-group pointer">' +
-					'<button type="button" class="btn btn-default btn-sm addActivity event"><i class="fa fa-clock-o"></i> time</button>' +
-					'<button type="button" class="btn btn-default btn-sm deleteTask event"><i class="fa fa-trash-o"></i> delete</button>' +
+					'<button type="button" class="btn btn-default btn-sm addActivity"><i class="fa fa-clock-o"></i> time</button>' +
+					'<button type="button" class="btn btn-default btn-sm deleteTask"><i class="fa fa-trash-o"></i> delete</button>' +
 				'</span>' +
 			'</li>';
 			$("#task-list").append(html);
@@ -55,7 +55,7 @@
 			var html = '<li id="activity_'+this.id+'" data-id="'+this.id+'" class="list-group-item activity">' +
 			duration + '&mdash;' + label +
 			'<span class="pull-right btn-group pointer">' +
-				'<button type="button" class="btn btn-default btn-xs deleteActivity event"><i class="fa fa-trash-o"></i> delete</button>' +
+				'<button type="button" class="btn btn-default btn-xs deleteActivity"><i class="fa fa-trash-o"></i> delete</button>' +
 			'</span>' +
 			'</li>';
 			
@@ -166,20 +166,36 @@
 			});
 			
 			// Check task as completed
-			$('#tasks').on('click', 'input[type=checkbox]', function() {
-				var id = $(this).parent().attr('data-id'),
-					completed = $(this).parent().attr('data-completed');
+			$('#tasks').on('click', '.completeTask', function() {
+				var task = $(this).parent(),
+					id = task.attr('data-id'),
+					completed = task.attr('data-completed');
 				if (completed == "false")
 				{
-					$(this).parent().addClass('completed').attr('data-completed', new Date());
+					task.addClass('completed').attr('data-completed', new Date());
 					nt.updateTask(id, 'completed', new Date());
+					
+					// Hide task ?
+					if ($('#toggleCompleted').data('toggled') == 0) task.hide();
 				}
 				else
 				{
-					$(this).parent().removeClass('completed').attr('data-completed', 'false');
+					task.removeClass('completed').attr('data-completed', 'false');
 					nt.updateTask(id, 'completed', 'false');
 				}
 				nt.saveData();
+			});
+			
+			// Toggle completed tasks
+			$('#toggleCompleted').on('click', function() {
+				var el = $(this);
+				if (el.data('toggled') == 1) {
+					$('.completed').hide();
+					el.data('toggled', 0);
+				} else {
+					$('.completed').show();
+					el.data('toggled', 1);
+				}
 			});
 			
 			/* ACTIVITY */
@@ -243,6 +259,7 @@
 					var task = new Task(item.id, item.name, item.order, item.created, item.completed);
 					task.append();
 				});
+				$('.completed').hide();
 				
 				$.each(nt.user_data.activities, function(index, item) {
 					var activity = new Activity(item.id, item.name, item.duration, item.task_id);
