@@ -133,7 +133,7 @@
 			/* TASKS */
 			
 			// Create new task
-			$('#createTask.event').submit( function(event) {
+			$('#createTask').submit( function(event) {
 				event.preventDefault();
 				
 				// Create new task object
@@ -148,13 +148,10 @@
 				
 				// Clear input
 				$(this).find('input').val('');
-				
-				// Reload events
-				nt.loadEvents();
-			}).removeClass('event');
+			});
 			
 			// Delete task
-			$('.deleteTask.event').click( function() {
+			$('#tasks').on('click', '.deleteTask', function() {
 				var id = $(this).parent().parent().data('id');
 				$('#task_'+id).slideUp('fast', function() { $(this).remove(); });
 				for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) 
@@ -166,10 +163,10 @@
 					}
 				}
 				nt.saveData();
-			}).removeClass('event');
+			});
 			
 			// Check task as completed
-			$('.task input[type=checkbox].event').click( function() {
+			$('#tasks').on('click', 'input[type=checkbox]', function() {
 				var id = $(this).parent().attr('data-id'),
 					completed = $(this).parent().attr('data-completed');
 				if (completed == "false")
@@ -183,12 +180,12 @@
 					nt.updateTask(id, 'completed', 'false');
 				}
 				nt.saveData();
-			}).removeClass('event');
+			});
 			
 			/* ACTIVITY */
 			
 			// Add activity
-			$('.addActivity.event').click( function() {
+			$('#tasks').on('click', '.addActivity', function() {
 				
 				// Get duration
 				var duration = prompt('Hours spent ?', 1);
@@ -203,10 +200,10 @@
 				nt.user_data.activities.push(activity);
 				nt.saveData();
 				
-			}).removeClass('event');
+			});
 			
 			// Delete activity
-			$('.deleteActivity.event').click( function() {
+			$('#activity').on('click','.deleteActivity', function() {
 				var id = $(this).parent().parent().data('id');
 				$('#activity_'+id).slideUp('fast', function() { $(this).remove(); });
 				for (var i = 0, c = nt.user_data.activities.length; i < c; i++) 
@@ -218,9 +215,7 @@
 					}
 				}
 				nt.saveData();
-			}).removeClass('event');
-			
-			console.log('Events loaded');
+			});
 			
 		},
 		
@@ -253,8 +248,6 @@
 					var activity = new Activity(item.id, item.name, item.duration, item.task_id);
 					activity.append();
 				});
-				
-				nt.loadEvents();
 			}
 		},
 		
@@ -280,28 +273,6 @@
 					break;
 				}
 			}
-		},
-		
-		// Render an activity
-		renderActivity: function(activity) {
-			
-			// #project and @client highlighting
-			var label = activity.name;
-			label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
-			label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
-			
-			// Duration
-			var hours = parseInt(Number(activity.duration)),
-				minutes = Math.round((Number(activity.duration)-hours) * 60),
-				duration = (hours < 10 ? '0' : '')+hours+':'+(minutes < 10 ? '0' : '')+minutes;
-		
-			html = '<li id="activity_'+activity.id+'" data-id="'+activity.id+'" class="list-group-item activity">' +
-					duration + '&mdash;' + label +
-					'<span class="pull-right btn-group pointer">' +
-						'<button type="button" class="btn btn-default btn-xs deleteActivity event"><i class="fa fa-trash-o"></i> delete</button>' +
-					'</span>' +
-				'</li>';
-			$("#activity-list").append(html);
 		}
 	}
 
