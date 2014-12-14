@@ -1,4 +1,36 @@
 
+	var Task = function(id, name, order, created, completed) {
+		this.id = id || nt.makeUid();
+		this.name = name;
+		this.order = order || 0;
+		this.created = created || new Date();
+		this.completed = completed || 'false';
+	}
+	
+	Task.prototype = {
+		append: function() {
+			
+			// Is task completed ?
+			var completed = (this.completed == 'false') ? '' : ' completed',
+				checked = (this.completed == 'false') ? '' : ' checked'
+			
+			// #project and @client highlighting
+			var label = this.name;
+			label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
+			label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
+			
+			html = '<li id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
+				'<input id="task_'+this.id+'_input" class="event" type="checkbox"'+checked+'> ' +
+				'<label for="task_'+this.id+'_input">'+ label + '</label>' +
+				'<span class="pull-right btn-group pointer">' +
+					'<button type="button" class="btn btn-default btn-sm addActivity event"><i class="fa fa-clock-o"></i> time</button>' +
+					'<button type="button" class="btn btn-default btn-sm deleteTask event"><i class="fa fa-trash-o"></i> delete</button>' +
+				'</span>' +
+			'</li>';
+			$("#task-list").append(html);
+		}
+	}
+
 	var nt = {
 		
 		app_version: '0.4',
@@ -70,16 +102,21 @@
 			// Create new task
 			$('#createTask.event').submit( function(event) {
 				event.preventDefault();
-				var task = {};
-				task.id = nt.makeUid(),
-				task.name = $(this).find('input').val();
-				task.order = 0;
-				task.created = new Date();
-				task.completed = 'false';
+				
+				// Create new task object
+				var task = new Task(0, $(this).find('input').val());
+				
+				// Save to localstorage
 				nt.user_data.tasks.push(task);
 				nt.saveData();
-				nt.renderTask(task);
+				
+				// Append to task list
+				task.append();
+				
+				// Clear input
 				$(this).find('input').val('');
+				
+				// Reload events
 				nt.loadEvents();
 			}).removeClass('event');
 			
@@ -102,7 +139,6 @@
 			$('.task input[type=checkbox].event').click( function() {
 				var id = $(this).parent().attr('data-id'),
 					completed = $(this).parent().attr('data-completed');
-				console.log('completed');
 				if (completed == "false")
 				{
 					$(this).parent().addClass('completed').attr('data-completed', new Date());
@@ -175,11 +211,12 @@
 			if (localStorage.user_data) {
 				nt.user_data = JSON.parse(localStorage.user_data);
 				if (typeof nt.user_data.activities === 'undefined') nt.user_data.activities = []; // Added in 0.4
-				for (task in nt.user_data.tasks)
-				{
-					task = nt.user_data.tasks[task];
-					nt.renderTask(task);
-				}
+				
+				$.each(nt.user_data.tasks, function(index, item) {
+					var task = new Task(item.id, item.name, item.order, item.created, item.completed);
+					task.append();
+				});
+				
 				for (a in nt.user_data.activities)
 				{
 					activity = nt.user_data.activities[a];
@@ -211,33 +248,6 @@
 					break;
 				}
 			}
-		},
-		
-		// Render a task
-		renderTask: function(task) {
-			if (task.completed != 'false') {
-				var completed = ' completed',
-					checked = ' checked';
-			}
-			else {
-				var completed = '',
-					checked = '';
-			}
-			
-			// #project and @client highlighting
-			var label = task.name;
-			label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
-			label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
-			
-			html = '<li id="task_'+task.id+'" data-id="'+task.id+'" class="list-group-item task'+completed+'" data-order='+task.order+' data-completed='+task.completed+'>' +
-					'<input id="task_'+task.id+'_input" class="event" type="checkbox"'+checked+'> ' +
-					'<label for="task_'+task.id+'_input">'+ label + '</label>' +
-					'<span class="pull-right btn-group pointer">' +
-						'<button type="button" class="btn btn-default btn-sm addActivity event"><i class="fa fa-clock-o"></i> time</button>' +
-						'<button type="button" class="btn btn-default btn-sm deleteTask event"><i class="fa fa-trash-o"></i> delete</button>' +
-					'</span>' +
-				'</li>';
-			$("#task-list").append(html);
 		},
 		
 		// Render an activity
