@@ -45,9 +45,18 @@
             </div>
 			<ul class="list-group sortable" id="task-list">
 				<li class="list-group-item">
-					<form id="createTask" class="event">
-						<input type="text" placeholder="New task for #project of @client" style="width: 100%" required>
-					</form>
+                    <div class="row">
+                        <div class="col-md-6">
+        					<form id="createTask" class="event">
+        						<input type="text" placeholder="New task for #project of @client" class="form-control" required>
+        					</form>
+                        </div>
+                        <div class="col-md-6">
+                            <form>
+                                <input type="search" placeholder="Filter by task, #project or @client" id="filterTasks" class="form-control">
+                            </form>
+                        </div>
+                    </div>
 				</li>
 			</ul>
 		</div>

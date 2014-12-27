@@ -29,3 +29,7 @@
 		opacity: 0.75;
 		font-size: 0.8em;
 	}
+	
+	.filtered {
+		opacity: 0.25;
+	}

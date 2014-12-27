@@ -61,6 +61,32 @@
 			
 			// Update DOM
 			$('#task_'+task.id).remove();			
+		},
+		
+		filter: function(query) {
+			
+			$('.filtered').removeClass('filtered');
+			
+			if (query)
+			{
+				$.each(this.list, function(i, task) {
+					
+					if (task.name.toLowerCase().indexOf(query.toLowerCase()) < 0)
+					{
+						$('#task_'+task.id).addClass('filtered');
+					}
+					else
+					{
+						$('#task_'+task.id).removeClass('filtered');
+					}
+					
+				});
+			}
+			else
+			{
+				$('#tasks').find('li').removeClass('filtered');
+			}
+			
 		}
 	};
 	
@@ -81,8 +107,11 @@
 			
 			// #project and @client highlighting
 			var label = this.name;
-			label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
-			label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
+			if (label)
+			{
+				label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
+				label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
+			}
 			
 			var html = '<li id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
 				'<input id="task_'+this.id+'_input" class="completeTask" type="checkbox"'+checked+'> ' +
@@ -95,11 +124,6 @@
 			'</li>';
 			
 			return html;
-		},
-		
-		replace: function() {
-			var html = this.render();
-			$('#task_'+this.id).replace(html);
 		}
 	};
 	
@@ -266,6 +290,13 @@
 					$('.completed').show();
 					el.data('toggled', 1);
 				}
+			});
+			
+			// Filter tasks
+			$('#filterTasks').on('keyup', function() {
+				
+				nt.tasks.filter($(this).val());
+				
 			});
 			
 			/* ACTIVITY */
