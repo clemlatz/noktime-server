@@ -162,7 +162,7 @@
 
 	var nt = {
 		
-		app_version: '0.5.0',
+		app_version: '0.6',
 		db_version: 1,
 		
 		user_id: null,

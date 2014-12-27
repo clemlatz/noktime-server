@@ -1,7 +1,7 @@
 {
   "name": "noktime",
   "description": "Simple time/task managment app",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "dependencies": {
     "express": "4.x",

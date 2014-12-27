@@ -16,12 +16,21 @@ You can now simply manage your tasks & time @ http://localhost:5000/
 
 TODO
 ----
- - Sync between devices (dropbox ?)
- - Backbone.js ?
+
+ - Activity timer
+ - Manage clients and project
  - Add notes to task
+ - Offline mode
+ - Backbone.js ?
+ - Sync between devices
 
 CHANGELOG
 ---------
+
+0.6 (2014-12-27)
+ - Edit task button
+ - Filter tasks by name
+ - Various code optimizations
 
 0.5 (2014-12-14)
  - Added a checkbox that toggle completed tasks
