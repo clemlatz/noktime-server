@@ -5,14 +5,14 @@
 		this.order = order || 0;
 		this.created = created || new Date();
 		this.completed = completed || 'false';
-	}
+	};
 	
 	Task.prototype = {
 		append: function() {
 			
 			// Is task completed ?
 			var completed = (this.completed == 'false') ? '' : ' completed',
-				checked = (this.completed == 'false') ? '' : ' checked'
+				checked = (this.completed == 'false') ? '' : ' checked';
 			
 			// #project and @client highlighting
 			var label = this.name;
@@ -29,7 +29,7 @@
 			'</li>';
 			$("#task-list").append(html);
 		}
-	}
+	};
 	
 	var Activity = function(id, name, duration, task_id) {
 		this.id = id || nt.makeUid();
@@ -37,7 +37,7 @@
 		this.duration = duration;
 		this.task_id = task_id;
 		this.date = new Date();
-	}
+	};
 	
 	Activity.prototype = {
 		append: function() {
@@ -62,7 +62,7 @@
 			$("#activity-list").append(html);
 			
 		}
-	}
+	};
 
 	var nt = {
 		
@@ -88,7 +88,7 @@
 					localStorage.removeItem('user_data');
 					localStorage.db_version = nt.db_version;
 				}
-				else throw new Error('Database is outdated. Please reload the page.')
+				else throw new Error('Database is outdated. Please reload the page.');
 			}
 			
 			// User UID
@@ -152,8 +152,15 @@
 			
 			// Delete task
 			$('#tasks').on('click', '.deleteTask', function() {
-				var id = $(this).parent().parent().data('id');
+				
+				// Get task
+				var id = $(this).closest('li').data('id'),
+					task = nt.getById(nt.user_data.tasks, id);
+				
+				// Remove task from DOM
 				$('#task_'+id).slideUp('fast', function() { $(this).remove(); });
+				
+				// Remove 
 				for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) 
 				{
 					if (nt.user_data.tasks[i].id == id) 
@@ -167,20 +174,21 @@
 			
 			// Check task as completed
 			$('#tasks').on('click', '.completeTask', function() {
-				var task = $(this).parent(),
-					id = task.attr('data-id'),
-					completed = task.attr('data-completed');
+				var task_element = $(this).parent(),
+					id = task_element.attr('data-id'),
+					completed = task_element.attr('data-completed');
+					
 				if (completed == "false")
 				{
-					task.addClass('completed').attr('data-completed', new Date());
+					task_element.addClass('completed').attr('data-completed', new Date());
 					nt.updateTask(id, 'completed', new Date());
 					
 					// Hide task ?
-					if ($('#toggleCompleted').data('toggled') == 0) task.hide();
+					if ($('#toggleCompleted').data('toggled') === 0) task_element.hide();
 				}
 				else
 				{
-					task.removeClass('completed').attr('data-completed', 'false');
+					task_element.removeClass('completed').attr('data-completed', 'false');
 					nt.updateTask(id, 'completed', 'false');
 				}
 				nt.saveData();
@@ -282,16 +290,36 @@
 		// Update a task
 		updateTask: function(id, field, value)
 		{
-			for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) 
+			var task = nt.getById(nt.user_data.tasks, id);
+			task[field] = value;
+		},
+		
+		// Get element in array by it's id
+		getById: function(array, id) {
+			for (var i = 0, c = array.length; i < c; i++) 
 			{
-				if (nt.user_data.tasks[i].id == id) 
+				if (array[i].id == id) 
 				{
-					nt.user_data.tasks[i][field] = value;
-					break;
+					return array[i];
 				}
+				
+				return false;
+			}
+		},
+		
+		removeById: function(array, id) {
+			for (var i = 0, c = array.length; i < c; i++) 
+			{
+				if (array[i].id == id) 
+				{
+					array.splice(i, 1);
+					return true;
+				}
+				
+				return false;
 			}
 		}
-	}
+	};
 
 	$(function() {
 
