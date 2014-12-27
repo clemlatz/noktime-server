@@ -1,4 +1,69 @@
-
+	
+	var TaskList = function(list) {
+		this.list = [];
+	};
+	// 
+	TaskList.prototype = {
+		load: function() {
+			
+			var list = this.list;
+			
+			// Load tasks from localstorage
+			$.each(nt.user_data.tasks, function(index, item) {
+				var task = new Task(item.id, item.name, item.order, item.created, item.completed);
+				list.push(task);
+				$('#task-list').append(task.render());
+			});
+			
+			// Hide completed tasks on startup
+			$('.completed').hide();
+		},
+		
+		add: function(task) {
+			
+			// Add to the task list object
+			this.list.push(task);
+			
+			// Save to localstorage
+			nt.saveData();
+			
+			// Append to the DOM to the DOM
+			$('#task-list').append(task.render());
+		},
+		
+		get: function(id) {
+			var key = nt.getKeyFromId(this.list, id);
+			return this.list[key];
+		},
+		
+		update: function(task) {
+			
+			// Update in list
+			var key = nt.getKeyFromId(this.list, task.id);
+			this.list[key] = task;
+			
+			// Save to localstorage
+			nt.saveData();
+			
+			// Update DOM
+			$('#task_'+task.id).replaceWith(task.render());
+		},
+		
+		delete: function(task) {
+			
+			// Update in list
+			var key = nt.getKeyFromId(this.list, task.id);
+			
+			this.list.splice(key, 1);
+			
+			// Save to localstorage
+			nt.saveData();
+			
+			// Update DOM
+			$('#task_'+task.id).remove();			
+		}
+	};
+	
 	var Task = function(id, name, order, created, completed) {
 		this.id = id || nt.makeUid();
 		this.name = name;
@@ -8,7 +73,7 @@
 	};
 	
 	Task.prototype = {
-		append: function() {
+		render: function() {
 			
 			// Is task completed ?
 			var completed = (this.completed == 'false') ? '' : ' completed',
@@ -23,11 +88,18 @@
 				'<input id="task_'+this.id+'_input" class="completeTask" type="checkbox"'+checked+'> ' +
 				'<label for="task_'+this.id+'_input">'+ label + '</label>' +
 				'<span class="pull-right btn-group pointer">' +
+					'<button type="button" class="btn btn-default btn-sm editTask"><i class="fa fa-edit"></i> edit</button>' +
 					'<button type="button" class="btn btn-default btn-sm addActivity"><i class="fa fa-clock-o"></i> time</button>' +
 					'<button type="button" class="btn btn-default btn-sm deleteTask"><i class="fa fa-trash-o"></i> delete</button>' +
 				'</span>' +
 			'</li>';
-			$("#task-list").append(html);
+			
+			return html;
+		},
+		
+		replace: function() {
+			var html = this.render();
+			$('#task_'+this.id).replace(html);
 		}
 	};
 	
@@ -74,6 +146,8 @@
 			tasks: [],
 			activities: []
 		},
+		
+		tasks: new TaskList(),
 		
 		initialize: function() {
 			
@@ -139,59 +213,47 @@
 				// Create new task object
 				var task = new Task(0, $(this).find('input').val());
 				
-				// Save to localstorage
-				nt.user_data.tasks.push(task);
-				nt.saveData();
-				
-				// Append to task list
-				task.append();
+				// Add to the task list
+				nt.tasks.add(task);
 				
 				// Clear input
 				$(this).find('input').val('');
 			});
 			
-			// Delete task
-			$('#tasks').on('click', '.deleteTask', function() {
+			// Edit task
+			$('#tasks').on('click', '.editTask', function() {
 				
-				// Get task
+				// Get task & task new name
 				var id = $(this).closest('li').data('id'),
-					task = nt.getById(nt.user_data.tasks, id);
+					task = nt.tasks.get(id);
+					newName = prompt('New task text ?', task.name);
 				
-				// Remove task from DOM
-				$('#task_'+id).slideUp('fast', function() { $(this).remove(); });
-				
-				// Remove 
-				for (var i = 0, c = nt.user_data.tasks.length; i < c; i++) 
-				{
-					if (nt.user_data.tasks[i].id == id) 
-					{
-						nt.user_data.tasks.splice(i, 1);
-						break;
-					}
-				}
-				nt.saveData();
+				task.name = newName;
+				nt.tasks.update(task);
 			});
 			
 			// Check task as completed
 			$('#tasks').on('click', '.completeTask', function() {
-				var task_element = $(this).parent(),
-					id = task_element.attr('data-id'),
-					completed = task_element.attr('data-completed');
+				
+				var task = nt.tasks.get($(this).closest('li').data('id'));
 					
-				if (completed == "false")
+				if (task.completed == "false")
 				{
-					task_element.addClass('completed').attr('data-completed', new Date());
-					nt.updateTask(id, 'completed', new Date());
-					
-					// Hide task ?
-					if ($('#toggleCompleted').data('toggled') === 0) task_element.hide();
+					task.completed = new Date();
 				}
 				else
 				{
-					task_element.removeClass('completed').attr('data-completed', 'false');
-					nt.updateTask(id, 'completed', 'false');
+					task.completed = "false";
 				}
-				nt.saveData();
+				nt.tasks.update(task);
+			});
+			
+			// Delete task
+			$('#tasks').on('click', '.deleteTask', function() {
+				
+				var task = nt.tasks.get($(this).closest('li').data('id'));
+				
+				nt.tasks.delete(task);
 			});
 			
 			// Toggle completed tasks
@@ -211,11 +273,13 @@
 			// Add activity
 			$('#tasks').on('click', '.addActivity', function() {
 				
+				var task = nt.tasks.get($(this).closest('li').data('id'));
+				
 				// Get duration
 				var duration = prompt('Hours spent ?', 1);
 				
 				// Create duration task
-				var activity = new Activity(0, $(this).parent().parent().find('label').text(), duration, $(this).parent().parent().data('id'));
+				var activity = new Activity(0, task.name, duration, task.id);
 
 				// Append to the DOM
 				activity.append();
@@ -254,20 +318,25 @@
 		// Save user data
 		saveData: function() {
 			nt.user_data.saved = new Date();
+			nt.user_data.tasks = nt.tasks.list;
 			localStorage.user_data = JSON.stringify(nt.user_data);
 		},
 		
 		// Load user data & hydrate page
 		loadData: function() {
 			if (localStorage.user_data) {
-				nt.user_data = JSON.parse(localStorage.user_data);
-				if (typeof nt.user_data.activities === 'undefined') nt.user_data.activities = []; // Added in 0.4
 				
-				$.each(nt.user_data.tasks, function(index, item) {
-					var task = new Task(item.id, item.name, item.order, item.created, item.completed);
-					task.append();
-				});
-				$('.completed').hide();
+				// Load data from localStorage
+				nt.user_data = JSON.parse(localStorage.user_data);
+				
+				// Load and render tasklist
+				nt.tasks.load();
+				
+				// Activities
+				if (typeof nt.user_data.activities === 'undefined') 
+				{
+					nt.user_data.activities = []; // Added in 0.4
+				}
 				
 				$.each(nt.user_data.activities, function(index, item) {
 					var activity = new Activity(item.id, item.name, item.duration, item.task_id);
@@ -290,21 +359,21 @@
 		// Update a task
 		updateTask: function(id, field, value)
 		{
-			var task = nt.getById(nt.user_data.tasks, id);
-			task[field] = value;
+			var task = Task.getById(id);
+			task.update();
 		},
 		
 		// Get element in array by it's id
-		getById: function(array, id) {
+		getKeyFromId: function(array, id) {
 			for (var i = 0, c = array.length; i < c; i++) 
 			{
 				if (array[i].id == id) 
 				{
-					return array[i];
+					return i;
 				}
-				
-				return false;
 			}
+			
+			return false;
 		},
 		
 		removeById: function(array, id) {
