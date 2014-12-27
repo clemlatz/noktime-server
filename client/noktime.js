@@ -252,8 +252,11 @@
 					task = nt.tasks.get(id);
 					newName = prompt('New task text ?', task.name);
 				
-				task.name = newName;
-				nt.tasks.update(task);
+				if (newName)
+				{
+					task.name = newName;
+					nt.tasks.update(task);
+				}
 			});
 			
 			// Check task as completed
