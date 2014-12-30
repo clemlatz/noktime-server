@@ -27,6 +27,11 @@ TODO
 CHANGELOG
 ---------
 
+0.6.1 (2014-12-30)
+- Filtering is now animated
+- Fix saving tax order
+- Fix task updating showing completed task
+
 0.6 (2014-12-27)
  - Edit task button
  - Filter tasks by name
