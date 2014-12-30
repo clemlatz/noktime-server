@@ -41,9 +41,10 @@
 			return this.list[key];
 		},
 		
-		update: function(task, save) {
+		update: function(task, save, append) {
 			
 			save = save || true;
+			append = append || true;
 			
 			// Update in list
 			var key = nt.getKeyFromId(this.list, task.id);
@@ -56,7 +57,10 @@
 			}
 			
 			// Update DOM
-			$('#task_'+task.id).replaceWith(task.render());
+			if (append)
+			{
+				$('#task_'+task.id).replaceWith(task.render());
+			}
 		},
 		
 		delete: function(task) {
@@ -111,8 +115,6 @@
 	Task.prototype = {
 		render: function() {
 			
-			console.log('render!');
-			
 			// Is task completed ?
 			var completed = (this.completed == 'false') ? '' : ' completed',
 				checked = (this.completed == 'false') ? '' : ' checked';
@@ -125,7 +127,14 @@
 				label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
 			}
 			
-			var html = '<li id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
+			// Hide completed task if necessary
+			var display;
+			if (!nt.showCompleted && this.completed != 'false')
+			{
+				display = 'style="display: none;"';
+			}
+			
+			var html = '<li '+display+' id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
 				'<input id="task_'+this.id+'_input" class="completeTask" type="checkbox"'+checked+'> ' +
 				'<label for="task_'+this.id+'_input">'+ label + '</label>' +
 				'<span class="pull-right btn-group pointer">' +
@@ -182,6 +191,8 @@
 			tasks: [],
 			activities: []
 		},
+		
+		showCompleted: false,
 		
 		tasks: new TaskList(),
 		
@@ -297,14 +308,18 @@
 			
 			// Toggle completed tasks
 			$('#toggleCompleted').on('click', function() {
-				var el = $(this);
-				if (el.data('toggled') == 1) {
+				
+				if (nt.showCompleted)
+				{
 					$('.completed').hide();
-					el.data('toggled', 0);
-				} else {
-					$('.completed').show();
-					el.data('toggled', 1);
+					nt.showCompleted = false;
 				}
+				else
+				{
+					$('.completed').show();
+					nt.showCompleted = true;
+				}
+
 			});
 			
 			// Filter tasks
@@ -446,8 +461,7 @@
 					
 					// Update task
 					task.order = i;
-					console.log(task);
-					nt.tasks.update(task, false);
+					nt.tasks.update(task, false, false);
 					
 					i++;
 				});
