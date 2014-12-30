@@ -19,13 +19,18 @@
 			$('.completed').hide();
 		},
 		
-		add: function(task) {
+		add: function(task, save) {
+			
+			save = save || true;
 			
 			// Add to the task list object
 			this.list.push(task);
 			
 			// Save to localstorage
-			nt.saveData();
+			if (save)
+			{
+				nt.saveData();
+			}
 			
 			// Append to the DOM to the DOM
 			$('#task-list').append(task.render());
@@ -36,14 +41,19 @@
 			return this.list[key];
 		},
 		
-		update: function(task) {
+		update: function(task, save) {
+			
+			save = save || true;
 			
 			// Update in list
 			var key = nt.getKeyFromId(this.list, task.id);
 			this.list[key] = task;
 			
 			// Save to localstorage
-			nt.saveData();
+			if (save)
+			{
+				nt.saveData();
+			}
 			
 			// Update DOM
 			$('#task_'+task.id).replaceWith(task.render());
@@ -100,6 +110,8 @@
 	
 	Task.prototype = {
 		render: function() {
+			
+			console.log('render!');
 			
 			// Is task completed ?
 			var completed = (this.completed == 'false') ? '' : ' completed',
@@ -390,13 +402,6 @@
 			$('#tab-'+page).addClass('active');
 		},
 		
-		// Update a task
-		updateTask: function(id, field, value)
-		{
-			var task = Task.getById(id);
-			task.update();
-		},
-		
 		// Get element in array by it's id
 		getKeyFromId: function(array, id) {
 			for (var i = 0, c = array.length; i < c; i++) 
@@ -431,14 +436,22 @@
 		$(".sortable").sortable({
 			update: function(event, ui) {
 			
-				// Update order
+				// Update task order
 				var i = 1;
 				$('.task').each( function() {
-					var id = $(this).attr('data-id');
-					nt.updateTask(id, 'order', i);
-					$(this).attr('data-order', i);
+
+					// Get task & task new name
+					var id = $(this).data('id'),
+						task = nt.tasks.get(id);
+					
+					// Update task
+					task.order = i;
+					console.log(task);
+					nt.tasks.update(task, false);
+					
 					i++;
 				});
+				
 				nt.user_data.tasks.sort(function(x, y) {
 					if (x.order < y.order) return -1;
 					if (x.order > y.order) return 1;
