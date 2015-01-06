@@ -27,6 +27,9 @@ TODO
 CHANGELOG
 ---------
 
+0.7 (2015-01-05)
+- Added a snooze task button
+
 0.6.1 (2014-12-30)
 - Filtering is now animated
 - Fix saving tax order
