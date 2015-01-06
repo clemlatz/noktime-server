@@ -10,7 +10,7 @@
 			
 			// Load tasks from localstorage
 			$.each(nt.user_data.tasks, function(index, item) {
-				var task = new Task(item.id, item.name, item.order, item.created, item.completed);
+				var task = new Task(item.id, item.name, item.order, item.created, item.completed, item.snoozed || 'false');
 				list.push(task);
 				$('#task-list').append(task.render());
 			});
@@ -104,45 +104,69 @@
 		}
 	};
 	
-	var Task = function(id, name, order, created, completed) {
+	var Task = function(id, name, order, created, completed, snoozed) {
 		this.id = id || nt.makeUid();
 		this.name = name;
 		this.order = order || 0;
 		this.created = created || new Date();
 		this.completed = completed || 'false';
+		this.snoozed = snoozed || 'false';
 	};
 	
 	Task.prototype = {
 		render: function() {
 			
 			// Is task completed ?
-			var completed = (this.completed == 'false') ? '' : ' completed',
-				checked = (this.completed == 'false') ? '' : ' checked';
+			var display, snoozeText = '',
+				completed = (this.completed == 'false') ? '' : ' completed',
+				checked = (this.completed == 'false') ? '' : ' checked',
+				snoozed = (this.snoozed == 'false') ? '' : ' snoozed';
 			
-			// #project and @client highlighting
-			var label = this.name;
-			if (label)
+			// Hide snoozed tasks if necessary
+			if (!nt.showSnoozed && this.snoozed != 'false')
 			{
-				label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
-				label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
+				display = 'style="display: none;"';
 			}
 			
-			// Hide completed task if necessary
-			var display;
+			// Hide completed tasks if necessary
 			if (!nt.showCompleted && this.completed != 'false')
 			{
 				display = 'style="display: none;"';
 			}
 			
-			var html = '<li '+display+' id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
+			if (this.snoozed && this.snoozed != 'false')
+			{
+				snoozeText = ' ('+this.snoozed+')';
+				
+				// After snooze date
+				if (Date.parse(this.snoozed) < +new Date())
+				{
+					display = '';
+					snoozed = '';
+					snoozeText = '';
+				}
+			}
+		
+			// label formatting: #project and @client highlighting
+			var label = this.name;
+			if (label)
+			{
+				label = label.replace(/(#\S*)/g, '<span class="label label-success">$1</span>');
+				label = label.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
+				label += snoozeText;
+			}
+				
+			var html = '<li '+display+' id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+snoozed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
 				'<input id="task_'+this.id+'_input" class="completeTask" type="checkbox"'+checked+'> ' +
 				'<label for="task_'+this.id+'_input">'+ label + '</label>' +
 				'<span class="pull-right btn-group pointer">' +
 					'<button type="button" class="btn btn-default btn-sm editTask"><i class="fa fa-edit"></i> edit</button>' +
 					'<button type="button" class="btn btn-default btn-sm addActivity"><i class="fa fa-clock-o"></i> time</button>' +
+					'<button type="button" class="btn btn-default btn-sm snoozeTask"><i class="fa fa-history"></i> snooze</button>' +
 					'<button type="button" class="btn btn-default btn-sm deleteTask"><i class="fa fa-trash-o"></i> delete</button>' +
 				'</span>' +
-			'</li>';
+			'</li>'+
+			'<li id="snooze_'+this.id+'" class="list-group-item text-center" style="display: none;"><div></div></li>';
 			
 			return html;
 		}
@@ -193,6 +217,7 @@
 		},
 		
 		showCompleted: false,
+		showSnoozed: false,
 		
 		tasks: new TaskList(),
 		
@@ -306,6 +331,24 @@
 				nt.tasks.delete(task);
 			});
 			
+			// Snooze task
+			$('#tasks').on('click', '.snoozeTask', function() {
+				var task = nt.tasks.get($(this).closest('li').data('id')),
+					li = $('#snooze_'+task.id);
+				
+				li.find('div').datepicker({
+					todayHighlight: true,
+					startDate: new Date()
+				}).on('changeDate', function(e) {
+					task.snoozed = e.date;
+					nt.tasks.update(task);
+					li.slideUp();
+				});
+				li.slideDown();
+				
+				// nt.tasks.delete(task);
+			});
+			
 			// Toggle completed tasks
 			$('#toggleCompleted').on('click', function() {
 				
@@ -318,6 +361,22 @@
 				{
 					$('.completed').show();
 					nt.showCompleted = true;
+				}
+
+			});
+			
+			// Toggle completed tasks
+			$('#toggleSnoozed').on('click', function() {
+				
+				if (nt.showSnoozed)
+				{
+					$('.snoozed').hide();
+					nt.showSnoozed = false;
+				}
+				else
+				{
+					$('.snoozed').show();
+					nt.showSnoozed = true;
 				}
 
 			});

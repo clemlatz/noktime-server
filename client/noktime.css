@@ -33,3 +33,7 @@
 	.filtered {
 		opacity: 0.25;
 	}
+
+	.snoozed {
+		color: lightblue;
+	}
