@@ -3,6 +3,8 @@ noktime
 
 Simple time &amp; tasks managment
 
+Demo: https://noktime.herokuapp.com/
+
 Installation
 ------------
 
