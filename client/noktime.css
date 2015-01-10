@@ -2,8 +2,25 @@
 		padding-top: 65px;
 	}
 	
-	.page {
-		display: none;
+	.panel {
+		position: absolute;
+    	top: 60px; bottom: 0; right: 0; left: 0;
+    	overflow-x: hidden;
+    	overflow-y: scroll;
+    	-webkit-overflow-scrolling: touch;
+		transition-duration: 0.5s;
+	}
+	
+	.left {
+	    transform: translate3d(-100%, 0, 0);
+	}
+
+	.center {
+	    transform: translate3d(0%, 0, 0);
+	}
+
+	.right {
+	    transform: translate3d(100%, 0, 0);
 	}
 	
 	label, .pointer {
