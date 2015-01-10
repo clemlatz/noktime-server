@@ -79,6 +79,7 @@ app.controller('TaskController', function($scope) {
 	
 	// Options
 	$scope.showCompleted = false;
+	$scope.filterBy = '';
 	
 });
 

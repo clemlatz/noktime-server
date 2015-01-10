@@ -21,7 +21,7 @@
             </div>
             <div class="col-md-6">
                 <form>
-                    <input type="search" placeholder="Filter by task, #project or @client" id="filterTasks" class="form-control">
+                    <input ng-model="filterBy" type="search" placeholder="Filter by task, #project or @client" class="form-control">
                 </form>
             </div>
         </div>
@@ -29,7 +29,7 @@
 </ul>
 
 <ul class="list-group" ng-model="tasks" ui-sortable>
-    <li ng-repeat="task in tasks" class="list-group-item" ng-hide="task.completed && !showCompleted" ng-class="{ completed: task.completed }">
+    <li ng-repeat="task in tasks | filter:filterBy" class="list-group-item" ng-hide="task.completed && !showCompleted" ng-class="{ completed: task.completed }">
         <div class="row">
             <div class="col-md-8">
                 <input id="input_{{$index}}" ng-model="task.completed" type="checkbox">
