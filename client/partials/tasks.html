@@ -1,0 +1,52 @@
+<div class="hidden-xs nav-padding-placeholder"></div>
+
+<h1>Tasks</h1>
+
+<div class="text-center">
+    <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-default">
+            <input type="checkbox" id="toggleCompleted"> completed tasks
+        </label>
+        <label class="btn btn-default">
+            <input type="checkbox" id="toggleSnoozed"> snoozed tasks
+        </label>
+    </div>
+</div><br>
+
+<ul class="list-group sortable">
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-md-6">
+                <form ng-submit="taskCtrl.create()">
+                    <input ng-model="taskCtrl.newTask.name" type="text" placeholder="New task for #project of @client" class="form-control" required>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form>
+                    <input type="search" placeholder="Filter by task, #project or @client" id="filterTasks" class="form-control">
+                </form>
+            </div>
+        </div>
+    </li>
+    
+    <li ng-repeat="task in tasks" class="list-group-item" ng-class="{ completed: task.completed }">
+        <div class="row">
+            <div class="col-md-8">
+                <input id="input_{{$index}}" ng-model="task.completed" type="checkbox">
+                <label for="input_{{$index}}">{{ task.name }}</label>
+            </div>
+            <div class="col-md-4">
+                <span class="pull-right btn-group pointer">
+                    <button type="button" class="btn btn-default btn-sm editTask"><i class="fa fa-edit"></i> edit</button>
+                    <button type="button" class="btn btn-default btn-sm addActivity"><i class="fa fa-clock-o"></i> time</button>
+                    <button type="button" class="btn btn-default btn-sm snoozeTask"><i class="fa fa-history"></i> snooze</button>
+                    <button type="button" class="btn btn-default btn-sm deleteTask"><i class="fa fa-trash-o"></i> delete</button>
+                </span>
+            </div>
+        </div>
+    </li>
+    	
+</ul>
+
+<div class="visible-xs nav-padding-placeholder"></div>
+	
