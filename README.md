@@ -29,6 +29,9 @@ TODO
 CHANGELOG
 ---------
 
+0.8 (2015-01-10)
+- Major revamp using AngularJS
+
 0.7 (2015-01-05)
 - Added a snooze task button
 
