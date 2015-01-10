@@ -1,3 +1,4 @@
+var app = angular.module('noktime', ['ui.sortable', 'ngSanitize']);
 
 /* MODELS */
 
@@ -9,9 +10,16 @@ var Task = function(name, id, order, created, completed, snoozed) {
 	this.snoozed = snoozed || false;
 };
 
-/* CONTROLLERS */
+/* FILTERS */
 
-var app = angular.module('noktime', ['ui.sortable']);
+app.filter('fancy', function() {
+	return function(input) {
+		return input.replace(/(#\S*)/g, '<span class="label label-success">$1</span>')
+			.replace(/(@\S*)/g, '<span class="label label-info">$1</span>');
+  	};
+});
+
+/* CONTROLLERS */
 
 app.controller('TabController', function() {
 	this.selected = 'tasks';
@@ -31,7 +39,6 @@ app.controller('TaskController', function($scope) {
 	};
 	
 	// Edit existing task
-	//
 	this.edit = function(task) {
 		var newName = prompt('New name ?', task.name);
 		if (newName) {
