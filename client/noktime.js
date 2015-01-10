@@ -30,6 +30,12 @@ app.controller('TaskController', function($scope) {
 		this.newTask = new Task(); // reset new task placeholder
 	};
 	
+	// Remove task from list
+	this.remove = function(task) {
+		var index = $scope.tasks.indexOf(task)
+		$scope.tasks.splice(index, 1);     
+	};
+	
 	// Save to localStorage
 	this.save = function() {
 		localStorage.tasks = angular.toJson($scope.tasks);

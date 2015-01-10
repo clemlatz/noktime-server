@@ -37,10 +37,10 @@
             </div>
             <div class="col-md-4">
                 <span class="pull-right btn-group pointer">
-                    <button type="button" class="btn btn-default btn-sm editTask"><i class="fa fa-edit"></i> edit</button>
-                    <button type="button" class="btn btn-default btn-sm addActivity"><i class="fa fa-clock-o"></i> time</button>
-                    <button type="button" class="btn btn-default btn-sm snoozeTask"><i class="fa fa-history"></i> snooze</button>
-                    <button type="button" class="btn btn-default btn-sm deleteTask"><i class="fa fa-trash-o"></i> delete</button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-edit"></i> edit</button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-clock-o"></i> time</button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-history"></i> snooze</button>
+                    <button ng-click="taskCtrl.remove(task)" type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i> delete</button>
                 </span>
             </div>
         </div>
