@@ -28,8 +28,8 @@ app.controller('TabController', function() {
 app.controller('TaskController', function($scope) {
 
 	var ctrl = this;
-
-	this.newTask = new Task();
+	
+	ctrl.newTask = new Task();
 
 	// Create new task
 	this.create = function() {
@@ -76,6 +76,9 @@ app.controller('TaskController', function($scope) {
 	$scope.$watch('tasks', function(newVal, oldVal) {
 		ctrl.save();
 	}, true);
+	
+	// Options
+	$scope.showCompleted = false;
 	
 });
 
