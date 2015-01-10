@@ -156,15 +156,24 @@
 				label += snoozeText;
 			}
 				
-			var html = '<li '+display+' id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+snoozed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
-				'<input id="task_'+this.id+'_input" class="completeTask" type="checkbox"'+checked+'> ' +
-				'<label for="task_'+this.id+'_input">'+ label + '</label>' +
-				'<span class="pull-right btn-group pointer">' +
-					'<button type="button" class="btn btn-default btn-sm editTask"><i class="fa fa-edit"></i> edit</button>' +
-					'<button type="button" class="btn btn-default btn-sm addActivity"><i class="fa fa-clock-o"></i> time</button>' +
-					'<button type="button" class="btn btn-default btn-sm snoozeTask"><i class="fa fa-history"></i> snooze</button>' +
-					'<button type="button" class="btn btn-default btn-sm deleteTask"><i class="fa fa-trash-o"></i> delete</button>' +
-				'</span>' +
+			var html = 
+			'<li '+display+' id="task_'+this.id+'" data-id="'+this.id+'" class="list-group-item task'+completed+snoozed+'" data-order='+this.order+' data-completed='+this.completed+'>' +
+				'<div class="row">' +
+					'<div class="col-md-6">' +
+						'<label for="task_'+this.id+'_input">'+ 
+							'<input id="task_'+this.id+'_input" class="completeTask" type="checkbox"'+checked+'> ' +
+							label + 
+						'</label>' +
+					'</div>' +
+					'<div class="col-md-6">' +
+						'<span class="pull-right btn-group pointer">' +
+							'<button type="button" class="btn btn-default btn-sm editTask"><i class="fa fa-edit"></i> edit</button>' +
+							'<button type="button" class="btn btn-default btn-sm addActivity"><i class="fa fa-clock-o"></i> time</button>' +
+							'<button type="button" class="btn btn-default btn-sm snoozeTask"><i class="fa fa-history"></i> snooze</button>' +
+							'<button type="button" class="btn btn-default btn-sm deleteTask"><i class="fa fa-trash-o"></i> delete</button>' +
+						'</span>' +
+					'</div>' +
+				'</div>' +
 			'</li>'+
 			'<li id="snooze_'+this.id+'" class="list-group-item text-center" style="display: none;"><div></div></li>';
 			
