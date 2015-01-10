@@ -1,8 +1,44 @@
-	body {
-		padding-top: 65px;
+
+	* {
+		box-sizing: border-box;
+	}
+
+	/* MOBILE NAV */
+
+	.mobile-nav {
+	    position: absolute;
+	    bottom: 0; left: 0; right: 0;
+	    height: 60px;
+	    line-height: 60px;
+	    color: white;
+	    text-align: center;
 	}
 	
-	.panel {
+	.mobile-nav ul {
+		padding: 0 !important;
+	}
+
+	.mobile-nav li {
+	    display: block;
+	    width: 50%;
+	    float: left;
+	}
+	
+	.mobile-nav a:hover {
+		text-decoration: none;
+	}
+
+	.mobile-nav a:first-child {
+	    border-right: 1px solid lightgray;
+	}
+
+	.mobile-nav .active {
+	    border-top: 3px solid gray;
+	}
+
+	/* PAGES */
+
+	.page {
 		position: absolute;
     	top: 60px; bottom: 0; right: 0; left: 0;
     	overflow-x: hidden;
@@ -12,16 +48,24 @@
 	}
 	
 	.left {
+	    -moz-transform: translate3d(-100%, 0, 0);
+	    -webkit-transform: translate3d(-100%, 0, 0);
 	    transform: translate3d(-100%, 0, 0);
 	}
 
 	.center {
+	    -moz-transform: translate3d(0%, 0, 0);
+	    -webkit-transform: translate3d(0%, 0, 0);
 	    transform: translate3d(0%, 0, 0);
 	}
 
 	.right {
+	    -moz-transform: translate3d(100%, 0, 0);
+	    -webkit-transform: translate3d(100%, 0, 0);
 	    transform: translate3d(100%, 0, 0);
 	}
+	
+	/* LABELS */
 	
 	label, .pointer {
 		cursor: pointer;
@@ -32,6 +76,8 @@
 		color: gray;
 		opacity: 0.5;
 	}
+	
+	/* TAGS */
 	
 	.project-tag {
 		background-color: lightgreen;
@@ -46,6 +92,8 @@
 		opacity: 0.75;
 		font-size: 0.8em;
 	}
+	
+	/* TASKS */
 	
 	.filtered {
 		opacity: 0.25;

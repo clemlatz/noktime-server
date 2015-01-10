@@ -12,16 +12,12 @@
         <link rel="shortcut icon" type="image/png" href="favicon.png">
     </head>
     <body ng-app="noktime" ng-controller="TabController as tabCtrl">
+        
+        <!-- DESKTOP NAV -->
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container">
 				<!-- Brand and toggle get grouped for better mobile display -->
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
 					<span class="navbar-brand" href="#">noktime <span class="app-version"></span></span>
 				</div>
 				
@@ -38,7 +34,7 @@
 			</div><!-- /.container-fluid -->
 		</nav>
 		
-		<div class="panel container" ng-class="{center: tabCtrl.selected === 'tasks', left: tabCtrl.selected !== 'tasks'}">
+		<div class="page container" ng-class="{center: tabCtrl.selected === 'tasks', left: tabCtrl.selected !== 'tasks'}">
             <div>
                 Show: 
                 <label for="toggleCompleted">
@@ -70,11 +66,19 @@
 			</ul>
 		</div>
 		
-		<div id="activity" class="panel container" ng-class="{center: tabCtrl.selected === 'activity', right: tabCtrl.selected !== 'activity'}">
+		<div id="activity" class="page container" ng-class="{center: tabCtrl.selected === 'activity', right: tabCtrl.selected !== 'activity'}">
             activity
 			<ul class="list-group sortable" id="activity-list">
 			</ul>
 		</div>
+        
+        <!-- MOBILE NAV -->
+        <nav class="visible-xs mobile-nav navbar-default"> 
+			<ul>
+                <li ng-click="tabCtrl.selected='tasks'" ng-class="{ active: tabCtrl.selected === 'tasks' }"><a href="#/tasks"><i class="fa fa-list"></i> Tasks</a></li>
+	            <li ng-click="tabCtrl.selected='activity'" ng-class="{ active: tabCtrl.selected === 'activity' }"><a href="#/activity" ><i class="fa fa-clock-o"></i> Activity</a></li>
+            </ul>         
+        </nav>
 		
 		<script src="/libs/jquery/dist/jquery.min.js"></script>
         <script src="/libs/jquery-ui/jquery-ui.min.js"></script>
