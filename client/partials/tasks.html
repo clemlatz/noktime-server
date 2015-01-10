@@ -13,7 +13,7 @@
     </div>
 </div><br>
 
-<ul class="list-group sortable">
+<ul class="list-group">
     <li class="list-group-item">
         <div class="row">
             <div class="col-md-6">
@@ -28,7 +28,9 @@
             </div>
         </div>
     </li>
-    
+</ul>
+
+<ul class="list-group" ng-model="tasks" ui-sortable>
     <li ng-repeat="task in tasks" class="list-group-item" ng-class="{ completed: task.completed }">
         <div class="row">
             <div class="col-md-8">

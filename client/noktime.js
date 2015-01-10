@@ -4,7 +4,6 @@
 var Task = function(name, id, order, created, completed, snoozed) {
 	this.id = id;
 	this.name = name;
-	this.order = order || 0;
 	this.created = created || new Date();
 	this.completed = completed || false;
 	this.snoozed = snoozed || false;
@@ -12,7 +11,7 @@ var Task = function(name, id, order, created, completed, snoozed) {
 
 /* CONTROLLERS */
 
-var app = angular.module('noktime', []);
+var app = angular.module('noktime', ['ui.sortable']);
 
 app.controller('TabController', function() {
 	this.selected = 'tasks';
@@ -32,7 +31,7 @@ app.controller('TaskController', function($scope) {
 	
 	// Remove task from list
 	this.remove = function(task) {
-		var index = $scope.tasks.indexOf(task)
+		var index = $scope.tasks.indexOf(task);
 		$scope.tasks.splice(index, 1);     
 	};
 	
