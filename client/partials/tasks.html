@@ -35,13 +35,13 @@
         <div class="row">
             <div class="col-md-8">
                 <input id="input_{{$index}}" ng-model="task.completed" type="checkbox">
-                <label for="input_{{$index}}">{{ task.name }}</label>
+                <label ng-dblclick="taskCtrl.edit(task)" for="input_{{$index}}">{{ task.name }}</label>
             </div>
             <div class="col-md-4">
                 <span class="pull-right btn-group pointer">
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-edit"></i> edit</button>
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-clock-o"></i> time</button>
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-history"></i> snooze</button>
+                    <button ng-click="taskCtrl.edit(task)" type="button" class="btn btn-default btn-sm"><i class="fa fa-edit"></i> edit</button>
+                    <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-clock-o"></i> time</button>
+                    <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-history"></i> snooze</button>
                     <button ng-click="taskCtrl.remove(task)" type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i> delete</button>
                 </span>
             </div>

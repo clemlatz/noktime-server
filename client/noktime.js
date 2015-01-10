@@ -23,16 +23,28 @@ app.controller('TaskController', function($scope) {
 
 	this.newTask = new Task();
 
+	// Create new task
 	this.create = function() {
 		$scope.tasks.push(this.newTask);
 		log('Added task: '+this.newTask.name);
 		this.newTask = new Task(); // reset new task placeholder
 	};
 	
+	// Edit existing task
+	//
+	this.edit = function(task) {
+		var newName = prompt('New name ?', task.name);
+		if (newName) {
+			log('Task name changed from '+task.name+' to'+newName);
+			task.name = newName;
+		}
+	};
+	
 	// Remove task from list
 	this.remove = function(task) {
 		var index = $scope.tasks.indexOf(task);
-		$scope.tasks.splice(index, 1);     
+		$scope.tasks.splice(index, 1);
+		log('Task '+task.name+' deleted');
 	};
 	
 	// Save to localStorage
